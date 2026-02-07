@@ -1,11 +1,11 @@
-# ModelingEvolution.Measurements
+# ModelingEvolution.RateCounters
 
-Lightweight measurement utilities for .NET: thread-safe rate counters, throughput meters, and performance metrics.
+Lightweight rate counting utilities for .NET: thread-safe rate counters for FPS, throughput, and request rate measurement.
 
 ## Installation
 
 ```bash
-dotnet add package ModelingEvolution.Measurements
+dotnet add package ModelingEvolution.RateCounters
 ```
 
 ## RateCounter
@@ -13,7 +13,7 @@ dotnet add package ModelingEvolution.Measurements
 Thread-safe rate counter that measures events per second over a configurable window.
 
 ```csharp
-using ModelingEvolution.Measurements;
+using ModelingEvolution.RateCounters;
 
 // FPS counter
 var fps = new RateCounter();

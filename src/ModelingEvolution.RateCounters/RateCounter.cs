@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace ModelingEvolution.Measurements;
+namespace ModelingEvolution.RateCounters;
 
 /// <summary>
 /// Thread-safe rate counter that measures events per second over a configurable window.

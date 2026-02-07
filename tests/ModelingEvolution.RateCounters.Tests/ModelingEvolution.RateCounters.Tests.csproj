@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ModelingEvolution.Measurements\ModelingEvolution.Measurements.csproj" />
+    <ProjectReference Include="..\..\src\ModelingEvolution.RateCounters\ModelingEvolution.RateCounters.csproj" />
   </ItemGroup>
 
 </Project>

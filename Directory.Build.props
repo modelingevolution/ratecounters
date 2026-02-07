@@ -9,14 +9,14 @@
     <!-- Package properties -->
     <Authors>ModelingEvolution Team</Authors>
     <Company>ModelingEvolution</Company>
-    <Product>ModelingEvolution.Measurements</Product>
+    <Product>ModelingEvolution.RateCounters</Product>
     <Copyright>Copyright © 2026 ModelingEvolution</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/modelingevolution/measurements</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/modelingevolution/measurements</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/modelingevolution/ratecounters</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/modelingevolution/ratecounters</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>measurements;fps;rate;counter;throughput;performance;metrics</PackageTags>
-    <Description>Lightweight measurement utilities for .NET: thread-safe rate counters, throughput meters, and performance metrics.</Description>
+    <PackageTags>ratecounter;fps;rate;counter;throughput;performance;metrics</PackageTags>
+    <Description>Lightweight rate counting utilities for .NET: thread-safe rate counters for FPS, throughput, and request rate measurement.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 </Project>

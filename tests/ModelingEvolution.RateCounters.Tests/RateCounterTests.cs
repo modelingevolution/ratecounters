@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace ModelingEvolution.Measurements.Tests;
+namespace ModelingEvolution.RateCounters.Tests;
 
 public class RateCounterTests
 {

@@ -1,23 +1,17 @@
-name: Release
+name: Publish to NuGet
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*.*.*'
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to release (e.g., 1.0.0)'
+        description: 'Version to publish'
         required: true
-        type: string
-
-env:
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  DOTNET_NOLOGO: true
-  NUGET_DIRECTORY: ${{ github.workspace }}/nuget
 
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,23 +20,21 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+    - uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
 
-    - name: Get version
+    - name: Set version
       id: version
       run: |
-        if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
           VERSION="${{ github.event.inputs.version }}"
         else
-          VERSION=${GITHUB_REF#refs/tags/v}
+          VERSION="${GITHUB_REF#refs/tags/v}"
         fi
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-        echo "Version: $VERSION"
 
-    - name: Restore dependencies
+    - name: Restore
       run: dotnet restore
 
     - name: Build
@@ -52,48 +44,30 @@ jobs:
       run: dotnet test --configuration Release --no-build --verbosity normal
 
     - name: Pack
-      run: |
-        dotnet pack src/ModelingEvolution.Measurements/ModelingEvolution.Measurements.csproj \
-          --configuration Release \
-          /p:Version=${{ steps.version.outputs.VERSION }} \
-          /p:PackageReleaseNotes="See https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.VERSION }}" \
-          --output ${{ env.NUGET_DIRECTORY }}
+      run: dotnet pack --configuration Release --no-build /p:Version=${{ steps.version.outputs.VERSION }} --output ./nupkg
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: nuget
-        if-no-files-found: error
-        retention-days: 7
-        path: ${{ env.NUGET_DIRECTORY }}/*.nupkg
-
-    - name: Publish to NuGet.org
+    - name: Push to ModelingEvolution NuGet
       run: |
-        for file in ${{ env.NUGET_DIRECTORY }}/*.nupkg
-        do
-          dotnet nuget push "$file" \
-            --api-key ${{ secrets.NUGET_API_KEY }} \
-            --source https://api.nuget.org/v3/index.json \
-            --skip-duplicate
-        done
-
-    - name: Publish to ModelingEvolution NuGet
-      run: |
-        dotnet nuget push "${{ env.NUGET_DIRECTORY }}/*.nupkg" \
+        dotnet nuget push ./nupkg/*.nupkg \
           --api-key ${{ secrets.NUGET_API_KEY_ME }} \
           --source https://nuget.modelingevolution.com/v3/index.json \
           --skip-duplicate
       continue-on-error: true
 
-    - name: Publish to GitHub Packages
+    - name: Push to NuGet.org
       run: |
-        for file in ${{ env.NUGET_DIRECTORY }}/*.nupkg
-        do
-          dotnet nuget push "$file" \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
-            --skip-duplicate
-        done
+        dotnet nuget push ./nupkg/*.nupkg \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --source https://api.nuget.org/v3/index.json \
+          --skip-duplicate
+
+    - name: Push to GitHub Packages
+      run: |
+        dotnet nuget push ./nupkg/*.nupkg \
+          --api-key ${{ secrets.GITHUB_TOKEN }} \
+          --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+          --skip-duplicate
+      continue-on-error: true
 
     - name: Create GitHub Release
       uses: ncipollo/release-action@v1
@@ -101,19 +75,16 @@ jobs:
         tag: v${{ steps.version.outputs.VERSION }}
         name: Release v${{ steps.version.outputs.VERSION }}
         body: |
-          ## ModelingEvolution.Measurements v${{ steps.version.outputs.VERSION }}
+          ## ModelingEvolution.RateCounters v${{ steps.version.outputs.VERSION }}
 
           ### Installation
           ```bash
-          dotnet add package ModelingEvolution.Measurements --version ${{ steps.version.outputs.VERSION }}
+          dotnet add package ModelingEvolution.RateCounters --version ${{ steps.version.outputs.VERSION }}
           ```
 
-          ### What's Changed
-          See [full changelog](https://github.com/${{ github.repository }}/compare/v${{ steps.version.outputs.VERSION }}...v${{ steps.version.outputs.VERSION }})
-
           ### NuGet Package
-          https://www.nuget.org/packages/ModelingEvolution.Measurements/${{ steps.version.outputs.VERSION }}
-        artifacts: ${{ env.NUGET_DIRECTORY }}/*.nupkg
+          https://www.nuget.org/packages/ModelingEvolution.RateCounters/${{ steps.version.outputs.VERSION }}
+        artifacts: ./nupkg/*.nupkg
         draft: false
         prerelease: false
         allowUpdates: true
