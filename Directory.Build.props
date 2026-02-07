@@ -1,0 +1,22 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <!-- Package properties -->
+    <Authors>ModelingEvolution Team</Authors>
+    <Company>ModelingEvolution</Company>
+    <Product>ModelingEvolution.Measurements</Product>
+    <Copyright>Copyright © 2026 ModelingEvolution</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/modelingevolution/measurements</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/modelingevolution/measurements</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>measurements;fps;rate;counter;throughput;performance;metrics</PackageTags>
+    <Description>Lightweight measurement utilities for .NET: thread-safe rate counters, throughput meters, and performance metrics.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+</Project>
